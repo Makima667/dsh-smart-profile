@@ -4,16 +4,61 @@
   "description": "Project stack detection and capability recommendations for DeepSeek Harness.",
   "type": "module",
   "main": "./index.js",
-  "exports": { ".": "./index.js", "./core": "./lib/core.js", "./discovery": "./lib/discovery.js", "./scoring": "./lib/scoring.js", "./install": "./lib/install.js", "./compat": "./lib/compat.js", "./compose": "./lib/compose.js", "./web": "./lib/web.js", "./setup": "./lib/setup.js" },
-  "bin": { "dsh-smart-profile": "./bin/cli.js" },
-  "files": ["index.js", "cordis.patch.yml", "lib/", "bin/", "README.md", "LICENSE", "CHANGELOG.md", "compatibility.json"],
-  "scripts": { "test": "node --test", "pack:check": "npm pack --dry-run" },
-  "engines": { "node": ">=20" },
-  "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "ai-agent", "developer-tools", "project-detection", "plugin-recommendation"],
+  "exports": {
+    ".": "./index.js",
+    "./core": "./lib/core.js",
+    "./discovery": "./lib/discovery.js",
+    "./scoring": "./lib/scoring.js",
+    "./install": "./lib/install.js",
+    "./compat": "./lib/compat.js",
+    "./compose": "./lib/compose.js",
+    "./web": "./lib/web.js",
+    "./setup": "./lib/setup.js"
+  },
+  "bin": {
+    "dsh-smart-profile": "bin/cli.js"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "lib/",
+    "bin/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "compatibility.json"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "pack:check": "npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "ai-agent",
+    "developer-tools",
+    "project-detection",
+    "plugin-recommendation"
+  ],
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/Makima667/dsh-smart-profile.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Makima667/dsh-smart-profile.git"
+  },
   "homepage": "https://github.com/Makima667/dsh-smart-profile#readme",
-  "bugs": { "url": "https://github.com/Makima667/dsh-smart-profile/issues" },
-  "publishConfig": { "access": "public" },
-  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
+  "bugs": {
+    "url": "https://github.com/Makima667/dsh-smart-profile/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
 }
