@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 - 2026-08-18
+
+- Add task-aware capability composition that narrows the project profile to the smallest useful capability set.
+- Keep project runtimes when code execution/inspection is implied while excluding unrelated high-privilege capabilities.
+- Add `compose <task>` CLI support and the read-only `smart_profile_compose` Harness tool.
+- Preserve explicit reasons for selected and excluded capabilities.
+
 ## 0.6.0 - 2026-08-18
 
 - Add an explicit DSH compatibility matrix with `ci-target`, `verified`, and `unknown` semantics.
