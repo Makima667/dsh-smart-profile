@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 - 2026-08-18
+
+- Add candidate metadata inspection and advisory scoring.
+- Score project fit, maintenance recency, package health, supply-chain signals and DSH bundle declarations.
+- Flag lifecycle install scripts, missing repositories/licenses, large dependency trees and unavailable metadata.
+- Add `score` CLI command and `smart_profile_score` Harness tool.
+
 ## 0.3.0 - 2026-08-18
 
 - Add public npm registry plugin candidate discovery.
