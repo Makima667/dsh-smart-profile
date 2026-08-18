@@ -4,12 +4,55 @@
   <strong>English</strong> | <a href="./README.zh-CN.md">简体中文</a>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/dsh-smart-profile.svg)](https://www.npmjs.com/package/dsh-smart-profile)
-[![license](https://img.shields.io/npm/l/dsh-smart-profile.svg)](./LICENSE)
+<p align="center">
+  <a href="https://www.npmjs.com/package/dsh-smart-profile"><img src="https://img.shields.io/npm/v/dsh-smart-profile.svg" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/dsh-smart-profile"><img src="https://img.shields.io/npm/dm/dsh-smart-profile.svg" alt="npm downloads"></a>
+  <a href="https://github.com/Makima667/dsh-smart-profile/releases"><img src="https://img.shields.io/github/v/release/Makima667/dsh-smart-profile" alt="GitHub release"></a>
+  <a href="https://github.com/Makima667/dsh-smart-profile/actions/workflows/compat.yml"><img src="https://github.com/Makima667/dsh-smart-profile/actions/workflows/compat.yml/badge.svg" alt="DSH compatibility"></a>
+  <a href="https://github.com/Makima667/dsh-smart-profile/actions/workflows/publish.yml"><img src="https://github.com/Makima667/dsh-smart-profile/actions/workflows/publish.yml/badge.svg" alt="npm publish"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/npm/l/dsh-smart-profile.svg" alt="license"></a>
+</p>
 
 > Project-aware capability setup for DeepSeek Harness: detect the repository, trim to the task, discover and score plugin candidates, preview exact changes, install with explicit approval, verify, and rollback on failure.
 
 `dsh-smart-profile` is designed to solve the configuration gap created by an “everything is a plugin” ecosystem. Instead of asking users to know every plugin in advance, it starts from the repository and the task.
+
+## Why use it?
+
+- **Project-aware** — starts from your actual repository instead of a generic plugin list.
+- **Task-aware** — trims capabilities for the concrete task you are trying to complete.
+- **Safety-first** — preview by default; installation requires explicit `--apply --approve`.
+- **Explainable** — detection returns evidence/confidence and plugin selection exposes scoring/risk signals.
+- **Recoverable** — verifies each installation and rolls back packages installed by the current run on failure.
+- **Low overhead** — zero runtime npm dependencies.
+
+## Quick start
+
+The package is publicly available on npm.
+
+```bash
+npx dsh-smart-profile --help
+npx dsh-smart-profile scan .
+npx dsh-smart-profile setup .
+```
+
+Check the current published version:
+
+```bash
+npm view dsh-smart-profile version
+```
+
+Install the bundle into a DeepSeek Harness profile:
+
+```bash
+npx --yes @deepseek-ai/dsh@next plugin --profile web add dsh-smart-profile@latest
+```
+
+Or use the helper command:
+
+```bash
+npx dsh-smart-profile install --profile web
+```
 
 ## What 1.0 does
 
@@ -44,35 +87,6 @@ failure → remove the current package and roll back packages installed by this 
 ```
 
 The default behavior is **preview-only**. The CLI does not write to a DSH profile unless the user supplies both `--apply` and `--approve`.
-
-## Quick start
-
-The package is publicly available on npm as `dsh-smart-profile@1.0.0`.
-
-Run it without a global install:
-
-```bash
-npx dsh-smart-profile --help
-npx dsh-smart-profile scan .
-```
-
-Check the current published version:
-
-```bash
-npm view dsh-smart-profile version
-```
-
-Install the bundle into a DeepSeek Harness profile:
-
-```bash
-npx --yes @deepseek-ai/dsh@next plugin --profile web add dsh-smart-profile@1.0.0
-```
-
-Or use the helper command:
-
-```bash
-npx dsh-smart-profile install --profile web
-```
 
 ## One-command project setup
 
@@ -240,6 +254,25 @@ It does not intentionally read:
 - arbitrary application source files
 
 Generated/build/vendor directories are skipped and scanning is bounded by depth and manifest limits.
+
+## Automated npm publishing
+
+The repository includes `.github/workflows/publish.yml` for npm Trusted Publishing with GitHub Actions OIDC.
+
+For future releases:
+
+1. bump `package.json` to the next version
+2. commit and push the change
+3. create and push a matching tag such as `v1.1.0`
+4. the workflow checks that the tag matches `package.json`
+5. tests and `npm run pack:check` must pass before `npm publish`
+
+The workflow intentionally contains **no long-lived npm publish token**. npm Trusted Publishing must be configured once for this package with:
+
+- GitHub owner: `Makima667`
+- repository: `dsh-smart-profile`
+- workflow filename: `publish.yml`
+- allowed action: `npm publish`
 
 ## Development
 
