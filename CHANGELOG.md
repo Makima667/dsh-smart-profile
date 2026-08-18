@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 - 2026-08-18
+
+- Add explicit install planning, approval gates, DSH bundle checks and lifecycle-script blocking.
+- Verify installed layers with `--dump-config` and automatically remove the package when verification fails.
+- Record configuration hashes instead of persisting dump-config contents.
+- Add `plan` and `apply --approve` CLI flows plus a non-writing Harness install-plan tool.
+
 ## 0.4.0 - 2026-08-18
 
 - Add candidate metadata inspection and advisory scoring.
