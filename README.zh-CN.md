@@ -4,12 +4,55 @@
   <a href="./README.md">English</a> | <strong>简体中文</strong>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/dsh-smart-profile.svg)](https://www.npmjs.com/package/dsh-smart-profile)
-[![license](https://img.shields.io/npm/l/dsh-smart-profile.svg)](./LICENSE)
+<p align="center">
+  <a href="https://www.npmjs.com/package/dsh-smart-profile"><img src="https://img.shields.io/npm/v/dsh-smart-profile.svg" alt="npm 版本"></a>
+  <a href="https://www.npmjs.com/package/dsh-smart-profile"><img src="https://img.shields.io/npm/dm/dsh-smart-profile.svg" alt="npm 下载量"></a>
+  <a href="https://github.com/Makima667/dsh-smart-profile/releases"><img src="https://img.shields.io/github/v/release/Makima667/dsh-smart-profile" alt="GitHub Release"></a>
+  <a href="https://github.com/Makima667/dsh-smart-profile/actions/workflows/compat.yml"><img src="https://github.com/Makima667/dsh-smart-profile/actions/workflows/compat.yml/badge.svg" alt="DSH 兼容 CI"></a>
+  <a href="https://github.com/Makima667/dsh-smart-profile/actions/workflows/publish.yml"><img src="https://github.com/Makima667/dsh-smart-profile/actions/workflows/publish.yml/badge.svg" alt="npm 自动发布"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/npm/l/dsh-smart-profile.svg" alt="许可证"></a>
+</p>
 
 > 面向 DeepSeek Harness 的项目感知能力配置工具：识别项目技术栈、根据任务裁剪能力、发现并评分插件候选、预览精确变更、在明确授权后安全安装、验证，并在失败时回滚。
 
 `dsh-smart-profile` 用来解决“Everything is a Plugin”生态中的配置门槛。用户不需要先知道所有插件，而是从**当前项目 + 当前任务**出发，得到尽可能小且可审查的能力配置方案。
+
+## 为什么用它？
+
+- **项目感知**：从真实仓库出发，而不是给出一张通用插件清单。
+- **任务感知**：根据当前具体任务裁剪能力，尽量避免加载无关工具。
+- **安全优先**：默认只预览，真正安装必须显式使用 `--apply --approve`。
+- **可解释**：技术栈识别返回证据和置信度，插件筛选暴露评分与风险信号。
+- **可恢复**：逐个验证安装结果，失败时回滚本轮新增插件。
+- **低负担**：运行时 npm 第三方依赖数量为 0。
+
+## 快速开始
+
+无需全局安装，直接运行：
+
+```bash
+npx dsh-smart-profile --help
+npx dsh-smart-profile scan .
+npx dsh-smart-profile setup .
+```
+
+查看当前 npm 正式版本：
+
+```bash
+npm view dsh-smart-profile version
+```
+
+将本插件安装到 DeepSeek Harness profile：
+
+```bash
+npx --yes @deepseek-ai/dsh@next plugin --profile web add dsh-smart-profile@latest
+```
+
+也可以使用本插件提供的辅助命令：
+
+```bash
+npx dsh-smart-profile install --profile web
+```
 
 ## 1.0 能做什么
 
@@ -44,33 +87,6 @@ DSH --dump-config 验证
 ```
 
 默认行为是**仅预览**。除非用户同时提供 `--apply` 和 `--approve`，CLI 不会修改 DSH profile。
-
-## 快速开始
-
-无需全局安装，直接运行：
-
-```bash
-npx dsh-smart-profile --help
-npx dsh-smart-profile scan .
-```
-
-当前 npm 正式版本：
-
-```bash
-npm view dsh-smart-profile version
-```
-
-将本插件安装到 DeepSeek Harness profile：
-
-```bash
-npx --yes @deepseek-ai/dsh@next plugin --profile web add dsh-smart-profile@1.0.0
-```
-
-也可以使用本插件提供的辅助命令：
-
-```bash
-npx dsh-smart-profile install --profile web
-```
 
 ## 一条命令生成项目配置方案
 
@@ -238,6 +254,25 @@ Web 面板：
 - 任意应用源码
 
 同时会跳过生成目录、构建目录和 vendor 目录，并限制扫描深度与 manifest 数量。
+
+## npm 自动发布
+
+仓库已经加入 `.github/workflows/publish.yml`，用于通过 GitHub Actions OIDC 和 npm Trusted Publishing 自动发布。
+
+以后发布新版本时：
+
+1. 修改 `package.json` 中的版本号
+2. commit 并 push
+3. 创建并推送匹配的 Tag，例如 `v1.1.0`
+4. 工作流会检查 Tag 与 `package.json` 是否一致
+5. `npm test` 和 `npm run pack:check` 全部通过后才执行 `npm publish`
+
+这个工作流**不保存长期 npm 发布 Token**。只需为当前 npm 包配置一次 Trusted Publisher：
+
+- GitHub 用户：`Makima667`
+- 仓库：`dsh-smart-profile`
+- Workflow 文件名：`publish.yml`
+- 允许操作：`npm publish`
 
 ## 开发
 
