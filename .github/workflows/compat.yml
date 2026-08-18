@@ -1,0 +1,44 @@
+name: DSH compatibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-and-package:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+      - run: npm run pack:check
+
+  dsh-next-bundle:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install local bundle into isolated profile
+        run: npx --yes @deepseek-ai/dsh@next plugin --profile compat add .
+      - name: Verify composed config without booting the app
+        shell: bash
+        run: |
+          npx --yes @deepseek-ai/dsh@next --profile compat --dump-config > /tmp/dsh-config.txt
+          grep -q "dsh-smart-profile" /tmp/dsh-config.txt

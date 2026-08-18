@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "package": "@deepseek-ai/dsh",
+  "channels": {
+    "next": {
+      "status": "ci-target",
+      "node": ["20", "22", "24"],
+      "note": "The next channel is exercised by the repository compatibility workflow. A green workflow run upgrades confidence for that commit; this file alone is not proof of compatibility."
+    }
+  },
+  "policy": {
+    "unknownVersions": "unknown",
+    "requireRuntimeVerificationBeforeInstall": true
+  }
+}

@@ -2,6 +2,7 @@ import { recommendProfile, scanProject } from './lib/core.js'
 import { discoverCandidates } from './lib/discovery.js'
 import { scoreCandidates } from './lib/scoring.js'
 import { buildInstallPlan } from './lib/install.js'
+import { compatibilityReport } from './lib/compat.js'
 export const name = 'dsh-smart-profile'
 export const inject = ['tools']
 const modelText = (value) => [{ type: 'text', text: JSON.stringify(value, null, 2) }]
@@ -13,5 +14,6 @@ export function apply(ctx) {
   ctx.tools.register(toolDefinition('smart_profile_recommend', 'Return a minimal, explainable set of capability categories useful for the current project.', async (_args, exec) => context(exec)))
   ctx.tools.register(toolDefinition('smart_profile_discover', 'Search public npm for Harness plugin candidates. Discovery only; nothing is installed.', async (_args, exec) => { const base = await context(exec); return { ...base, discovery: await discoverCandidates(base.recommendations) } }))
   ctx.tools.register(toolDefinition('smart_profile_install_plan', 'Build a non-executing install/verify/rollback command plan for the highest-scoring candidate. This tool never runs the commands.', async (_args, exec) => { const base = await context(exec); const discovery = await discoverCandidates(base.recommendations); const scoring = await scoreCandidates(discovery); const candidate = scoring.candidates[0] ?? null; return { ...base, candidate, plan: candidate ? buildInstallPlan(candidate) : null } }))
+  ctx.tools.register(toolDefinition('smart_profile_compat', 'Report the local DeepSeek Harness compatibility policy. CI targets are not presented as verified until evidence exists.', async () => compatibilityReport('next')))
   ctx.tools.register(toolDefinition('smart_profile_score', 'Discover and score candidate plugins using project fit, maintenance, package metadata, supply-chain signals, and DSH bundle declarations.', async (_args, exec) => { const base = await context(exec); const discovery = await discoverCandidates(base.recommendations); return { ...base, discovery, scoring: await scoreCandidates(discovery) } }))
 }

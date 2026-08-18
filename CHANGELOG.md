@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 - 2026-08-18
+
+- Add an explicit DSH compatibility matrix with `ci-target`, `verified`, and `unknown` semantics.
+- Add a `compat` CLI report and read-only `smart_profile_compat` Harness tool.
+- Add GitHub Actions coverage for Node 20/22/24, npm packaging, local bundle installation, and `--dump-config` verification against `@deepseek-ai/dsh@next`.
+- Never present a declared CI target as verified until external test evidence exists.
+
 ## 0.5.0 - 2026-08-18
 
 - Add explicit install planning, approval gates, DSH bundle checks and lifecycle-script blocking.
