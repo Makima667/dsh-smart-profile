@@ -1,5 +1,12 @@
 # dsh-smart-profile
 
+<p align="center">
+  <strong>English</strong> | <a href="./README.zh-CN.md">简体中文</a>
+</p>
+
+[![npm version](https://img.shields.io/npm/v/dsh-smart-profile.svg)](https://www.npmjs.com/package/dsh-smart-profile)
+[![license](https://img.shields.io/npm/l/dsh-smart-profile.svg)](./LICENSE)
+
 > Project-aware capability setup for DeepSeek Harness: detect the repository, trim to the task, discover and score plugin candidates, preview exact changes, install with explicit approval, verify, and rollback on failure.
 
 `dsh-smart-profile` is designed to solve the configuration gap created by an “everything is a plugin” ecosystem. Instead of asking users to know every plugin in advance, it starts from the repository and the task.
@@ -31,34 +38,41 @@ install one by one
   ↓
 DSH --dump-config verification
   ↓
-success ───────────────────────────────┐
-                                      │
-failure → rollback current + prior ←──┘
+success
+
+failure → remove the current package and roll back packages installed by this run in reverse order
 ```
 
 The default behavior is **preview-only**. The CLI does not write to a DSH profile unless the user supplies both `--apply` and `--approve`.
 
-## Install
+## Quick start
 
-The package is npm-ready. After `dsh-smart-profile` is published to npm:
+The package is publicly available on npm as `dsh-smart-profile@1.0.0`.
 
-```bash
-npm exec --yes dsh-smart-profile@latest -- install --profile web
-```
-
-Equivalent DeepSeek Harness command:
+Run it without a global install:
 
 ```bash
-npx --yes @deepseek-ai/dsh@next plugin --profile web add dsh-smart-profile@latest
+npx dsh-smart-profile --help
+npx dsh-smart-profile scan .
 ```
 
-You can also install a pinned GitHub commit directly with Harness:
+Check the current published version:
 
 ```bash
-npx --yes @deepseek-ai/dsh@next plugin --profile web add github:Makima667/dsh-smart-profile#<commit-sha>
+npm view dsh-smart-profile version
 ```
 
-Pinning a commit is recommended for Git installs because the source cannot change underneath the same spec.
+Install the bundle into a DeepSeek Harness profile:
+
+```bash
+npx --yes @deepseek-ai/dsh@next plugin --profile web add dsh-smart-profile@1.0.0
+```
+
+Or use the helper command:
+
+```bash
+npx dsh-smart-profile install --profile web
+```
 
 ## One-command project setup
 
@@ -143,7 +157,7 @@ Current detectors include:
 - Docker / Compose
 - Kubernetes / Helm
 - Terraform
-- AWS / Azure / Google Cloud selected signals
+- selected AWS / Azure / Google Cloud signals
 - GitHub Actions, Azure Pipelines, Google Cloud Build
 - Playwright, Cypress, Vitest, Jest, Pytest, PHPUnit, RSpec, xUnit
 - npm/yarn/pnpm workspaces, Turborepo, Nx, Lerna
