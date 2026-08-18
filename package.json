@@ -1,48 +1,16 @@
 {
   "name": "dsh-smart-profile",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Project stack detection and capability recommendations for DeepSeek Harness.",
   "type": "module",
   "main": "./index.js",
-  "exports": {
-    ".": "./index.js",
-    "./core": "./lib/core.js"
-  },
-  "bin": {
-    "dsh-smart-profile": "./bin/cli.js"
-  },
-  "files": [
-    "index.js",
-    "cordis.patch.yml",
-    "lib/",
-    "bin/",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
-  ],
-  "scripts": {
-    "test": "node --test",
-    "pack:check": "npm pack --dry-run"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "keywords": [
-    "dsh",
-    "deepseek-harness",
-    "dsh-plugin",
-    "ai-agent",
-    "developer-tools",
-    "project-detection",
-    "plugin-recommendation"
-  ],
+  "exports": { ".": "./index.js", "./core": "./lib/core.js", "./discovery": "./lib/discovery.js" },
+  "bin": { "dsh-smart-profile": "./bin/cli.js" },
+  "files": ["index.js", "cordis.patch.yml", "lib/", "bin/", "README.md", "LICENSE", "CHANGELOG.md"],
+  "scripts": { "test": "node --test", "pack:check": "npm pack --dry-run" },
+  "engines": { "node": ">=20" },
+  "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "ai-agent", "developer-tools", "project-detection", "plugin-recommendation"],
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    }
-  }
+  "publishConfig": { "access": "public" },
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } }
 }

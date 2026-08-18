@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 - 2026-08-18
+
+- Add public npm registry plugin candidate discovery.
+- Map candidates to recommended capability categories and matching terms.
+- Filter for Harness-oriented package markers and keep discovery non-executing.
+- Add `discover` CLI command and `smart_profile_discover` Harness tool.
+- Tolerate partial registry failures without losing successful capability results.
+
 ## 0.2.0 - 2026-08-18
 
 - Add confidence scores, evidence sources, deterministic ordering and TypeScript/JavaScript conflict collapse.
