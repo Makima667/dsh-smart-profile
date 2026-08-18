@@ -1,10 +1,10 @@
 {
   "name": "dsh-smart-profile",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Project stack detection and capability recommendations for DeepSeek Harness.",
   "type": "module",
   "main": "./index.js",
-  "exports": { ".": "./index.js", "./core": "./lib/core.js", "./discovery": "./lib/discovery.js", "./scoring": "./lib/scoring.js", "./install": "./lib/install.js", "./compat": "./lib/compat.js", "./compose": "./lib/compose.js" },
+  "exports": { ".": "./index.js", "./core": "./lib/core.js", "./discovery": "./lib/discovery.js", "./scoring": "./lib/scoring.js", "./install": "./lib/install.js", "./compat": "./lib/compat.js", "./compose": "./lib/compose.js", "./web": "./lib/web.js" },
   "bin": { "dsh-smart-profile": "./bin/cli.js" },
   "files": ["index.js", "cordis.patch.yml", "lib/", "bin/", "README.md", "LICENSE", "CHANGELOG.md", "compatibility.json"],
   "scripts": { "test": "node --test", "pack:check": "npm pack --dry-run" },

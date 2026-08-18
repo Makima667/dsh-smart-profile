@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 - 2026-08-18
+
+- Add a zero-dependency, read-only local web dashboard for project detection, recommendations, and task-scoped composition.
+- Bind to loopback by default and reject remote exposure unless explicitly overridden by library callers.
+- Add CSP, no-store responses, output escaping, and no web endpoints for plugin installation/removal.
+- Add `web [path] --port <port>` CLI support and `/api/profile` JSON output.
+
 ## 0.7.0 - 2026-08-18
 
 - Add task-aware capability composition that narrows the project profile to the smallest useful capability set.
