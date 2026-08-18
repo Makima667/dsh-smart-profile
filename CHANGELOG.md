@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0 - 2026-08-18
+
+- Complete the project-aware setup pipeline: scan → optional task composition → discovery → scoring → compatibility report → safe candidate selection → exact install plans.
+- Add `setup` preview and `setup --apply --approve` execution flows. Preview remains the default.
+- Require candidates to meet the score threshold, declare a DSH bundle, and avoid blocking lifecycle-script risk before automatic selection.
+- Verify every installed bundle with DSH `--dump-config`; rollback the current candidate on verification failure and rollback earlier packages installed by the same setup run in reverse order.
+- Detect pre-existing bundles and leave them untouched during setup/rollback.
+- Add a preview-only `smart_profile_setup_plan` Harness tool; autonomous model-triggered writes are intentionally not exposed.
+- Add npm repository/homepage/bugs metadata and final 1.0 documentation.
+
 ## 0.8.0 - 2026-08-18
 
 - Add a zero-dependency, read-only local web dashboard for project detection, recommendations, and task-scoped composition.

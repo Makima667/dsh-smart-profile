@@ -8,9 +8,10 @@ import { buildInstallPlan, safeInstall } from '../lib/install.js'
 import { compatibilityReport } from '../lib/compat.js'
 import { composeTaskProfile } from '../lib/compose.js'
 import { startDashboard } from '../lib/web.js'
+import { applySetupPlan, buildSetupPlan } from '../lib/setup.js'
 const PACKAGE_NAME = 'dsh-smart-profile'
-const VERSION = '0.8.0'
-function usage() { console.log(`dsh-smart-profile ${VERSION}\n\nUsage:\n  dsh-smart-profile scan [path] [--json]\n  dsh-smart-profile recommend [path] [--json]\n  dsh-smart-profile discover [path] [--json]\n  dsh-smart-profile score [path] [--json]\n  dsh-smart-profile compat [target] [--json]\n  dsh-smart-profile compose <task> [path] [--json]\n  dsh-smart-profile web [path] [--port 4173]\n  dsh-smart-profile plan <package> [--profile web]\n  dsh-smart-profile apply <package> --approve [--profile web] [--allow-risky]\n  dsh-smart-profile install [--profile web] [--version latest]\n  dsh-smart-profile uninstall [--profile web]\n`) }
+const VERSION = '1.0.0'
+function usage() { console.log(`dsh-smart-profile ${VERSION}\n\nUsage:\n  dsh-smart-profile scan [path] [--json]\n  dsh-smart-profile recommend [path] [--json]\n  dsh-smart-profile discover [path] [--json]\n  dsh-smart-profile score [path] [--json]\n  dsh-smart-profile compat [target] [--json]\n  dsh-smart-profile compose <task> [path] [--json]\n  dsh-smart-profile web [path] [--port 4173]\n  dsh-smart-profile setup [path] [--task \"...\"] [--profile web] [--min-score 70] [--apply --approve]\n  dsh-smart-profile plan <package> [--profile web]\n  dsh-smart-profile apply <package> --approve [--profile web] [--allow-risky]\n  dsh-smart-profile install [--profile web] [--version latest]\n  dsh-smart-profile uninstall [--profile web]\n`) }
 function argValue(args, flag, fallback) { const i = args.indexOf(flag); return i === -1 ? fallback : (args[i + 1] ?? fallback) }
 function positionalPath(args) { return args.find((arg, i) => i > 0 && !arg.startsWith('-') && !['--profile', '--version'].includes(args[i - 1])) }
 function run(command, args) { return new Promise((resolve, reject) => { const child = spawn(command, args, { stdio: 'inherit', shell: false }); child.on('error', reject); child.on('exit', (code, signal) => signal ? reject(new Error(`Command terminated by ${signal}`)) : resolve(code ?? 1)) }) }
@@ -18,6 +19,16 @@ async function runDshPlugin(action, profile, spec) { const npx = process.platfor
 async function main() {
   const args = process.argv.slice(2), command = args[0]
   if (!command || ['--help', '-h', 'help'].includes(command)) return usage()
+  if (command === 'setup') {
+    const valueFlags = new Set(['--task', '--profile', '--min-score', '--dsh-target']); let rootArg = '.'
+    for (let i = 1; i < args.length; i += 1) { if (valueFlags.has(args[i])) { i += 1; continue } if (!args[i].startsWith('-')) { rootArg = args[i]; break } }
+    const minScore = Number(argValue(args, '--min-score', '70'))
+    if (!Number.isFinite(minScore) || minScore < 0 || minScore > 100) throw new Error('min-score must be between 0 and 100.')
+    const plan = await buildSetupPlan(path.resolve(rootArg), { task: argValue(args, '--task', ''), profile: argValue(args, '--profile', 'web'), dshTarget: argValue(args, '--dsh-target', 'next'), minScore })
+    if (!args.includes('--apply')) return console.log(JSON.stringify(plan, null, 2))
+    const result = await applySetupPlan(plan, { approved: args.includes('--approve') })
+    console.log(JSON.stringify(result, null, 2)); if (!['configured', 'nothing-to-install'].includes(result.status)) process.exitCode = 1; return
+  }
   if (command === 'web') { const root = path.resolve(args[1] && !args[1].startsWith('-') ? args[1] : '.'); const port = Number(argValue(args, '--port', '4173')); if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('Invalid port.'); const dashboard = await startDashboard({ root, port }); console.log(`[dsh-smart-profile] dashboard: ${dashboard.url}`); return }
   if (command === 'compose') { const task = args[1]; if (!task || task.startsWith('-')) throw new Error('Task text is required.'); const root = path.resolve(args[2] && !args[2].startsWith('-') ? args[2] : '.'); const scan = await scanProject(root); const recommendations = recommendProfile(scan); return console.log(JSON.stringify({ scan, recommendations, composition: composeTaskProfile(scan, recommendations, task) }, null, 2)) }
   if (command === 'compat') { const target = args[1] && !args[1].startsWith('-') ? args[1] : 'next'; return console.log(JSON.stringify(await compatibilityReport(target), null, 2)) }
